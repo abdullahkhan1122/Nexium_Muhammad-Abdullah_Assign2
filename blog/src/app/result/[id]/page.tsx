@@ -1,9 +1,16 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
-export default async function ResultPage({ params }: { params: { id: string } }) {
-    const id = params.id;
+// Use NextPage from next for proper typing
+import { NextPage } from "next";
 
+// Define the props type for the dynamic route
+type ResultPageProps = {
+    params: { id: string };
+};
+
+const ResultPage: NextPage<ResultPageProps> = async ({ params }) => {
+    const id = params.id;
 
     const { data, error } = await supabase
         .from("summaries")
@@ -22,12 +29,8 @@ export default async function ResultPage({ params }: { params: { id: string } })
     return (
         <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100">
             <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-2xl space-y-10 border border-gray-200">
-
-                {/* Header */}
                 <div className="flex items-center justify-between">
-                    <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-                        Blog Summary
-                    </h1>
+                    <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">Blog Summary</h1>
                     <Link
                         href="/"
                         className="text-sm sm:text-base px-4 py-2 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition"
@@ -36,19 +39,18 @@ export default async function ResultPage({ params }: { params: { id: string } })
                     </Link>
                 </div>
 
-                {/* URL */}
                 <section className="space-y-2">
                     <h2 className="text-lg font-semibold text-gray-700">Source URL</h2>
                     <a
                         href={data.url}
                         target="_blank"
+                        rel="noopener noreferrer"
                         className="block text-blue-600 hover:text-blue-800 underline break-words"
                     >
                         {data.url}
                     </a>
                 </section>
 
-                {/* English Summary */}
                 <section className="space-y-2">
                     <h2 className="text-lg font-semibold text-gray-700">English Summary</h2>
                     <p className="bg-gray-50 p-5 rounded-xl text-gray-800 leading-relaxed border border-gray-200">
@@ -56,22 +58,20 @@ export default async function ResultPage({ params }: { params: { id: string } })
                     </p>
                 </section>
 
-                {/* Keywords */}
                 <section className="space-y-2">
                     <h2 className="text-lg font-semibold text-gray-700">Keywords</h2>
                     <ul className="flex flex-wrap gap-2">
-                        {(data.keywords || []).map((k: string) => (
+                        {(data.keywords || []).map((keyword: string) => (
                             <li
-                                key={k}
+                                key={keyword}
                                 className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full border border-blue-200 hover:bg-blue-200 transition"
                             >
-                                {k}
+                                {keyword}
                             </li>
                         ))}
                     </ul>
                 </section>
 
-                {/* Urdu Translation */}
                 <section className="space-y-2">
                     <h2 className="text-lg font-semibold text-gray-700">Urdu Translation</h2>
                     <p className="bg-green-50 p-5 rounded-xl text-gray-800 leading-relaxed border border-green-100 font-urdu">
@@ -81,4 +81,6 @@ export default async function ResultPage({ params }: { params: { id: string } })
             </div>
         </div>
     );
-}
+};
+
+export default ResultPage;
