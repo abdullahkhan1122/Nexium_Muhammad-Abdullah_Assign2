@@ -2,7 +2,8 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 export default async function ResultPage({ params }: { params: { id: string } }) {
-    const id = (await params).id;
+    const id = params.id;
+
 
     const { data, error } = await supabase
         .from("summaries")
