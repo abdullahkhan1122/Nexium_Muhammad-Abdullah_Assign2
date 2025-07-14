@@ -12,7 +12,7 @@ export async function scrapeBlogText(url: string): Promise<string | null> {
     const html = await res.text();
     const $ = cheerio.load(html);
 
-    let paragraphs :string[] = [];
+    const paragraphs :string[] = [];
 
     // Prefer articles or blog-related containers first
     const containers = [
@@ -52,7 +52,7 @@ export async function scrapeBlogText(url: string): Promise<string | null> {
     const finalText = paragraphs.join(" ");
     return finalText.length > 100 ? finalText : null;
   } catch (err) {
-    console.error("❌ Error scraping blog:", err);
+    console.error("Error scraping blog:", err);
     return null;
   }
 }
